@@ -12,8 +12,8 @@ TCR V(D)J "genes" sequence for human and mouse.
 
 #### Human
 
-- [TCR-α][TCRA-locus]
-- [TCR-β][TCRB-locus]
+- [TCR-α][TCRA-human-locus]
+- [TCR-β][TCRB-human-locus]
 
 #### Mouse
 
@@ -21,11 +21,11 @@ TCR V(D)J "genes" sequence for human and mouse.
 - [TCR-β][TCRB-mouse-locus]
 
 <!-- refs -->
-[TCRA-locus]: https://www.ncbi.nlm.nih.gov/gene/6955
+[TCRA-human-locus]: https://www.ncbi.nlm.nih.gov/gene/6955
 [TCRA-gene-family]: http://www.genenames.org/cgi-bin/genefamilies/set/371
 
-[TCRB-locus]: https://www.ncbi.nlm.nih.gov/gene/6957
+[TCRB-human-locus]: https://www.ncbi.nlm.nih.gov/gene/6957
 [TCRB-gene-family]: http://www.genenames.org/cgi-bin/genefamilies/set/372
 
-[TCRA-mouse-locus]: https://www.ncbi.nlm.nih.gov/gene/21577
-[TCRB-mouse-locus]: https://www.ncbi.nlm.nih.gov/gene/21473
+[TCRA-mouse-locus]: https://www.ncbi.nlm.nih.gov/gene/21473
+[TCRB-mouse-locus]: https://www.ncbi.nlm.nih.gov/gene/21577
