@@ -29,16 +29,52 @@ ACAAAGCTGGAGGACTCAGCCATGTACTTCTGTGCCAGCAGTGAAGC
 
 These are the sequences which we need to include.
 
-### Annotate sequences using IgBLAST
+## Annotation
 
-These sequences are longer than those found in the IMGT database; we annotate them using IgBLAST so that the IgBLAST-provided CDRx positions are correct. It would be good to have another independent way of checking that these CDRx positions are correct for our database.
+We annotate them using IgBLAST so that the IgBLAST-provided CDRx positions are correct. It would be good to have another independent way of checking that these CDRx positions are correct for our database.
 
-The alignment is going to tell us
+### V genes
 
-1. The closest IMGT sequence (there are more and less sequences in our subset than in IMGT)
-2. Where do the IMGT-equivalent sequence starts
+These sequences are longer than those found in the IMGT database: we need to identify the signal peptide and remove it from all V sequences.
 
-Note that for those sequences which are not completely identical to some IMGT one, we need a way of determining the CDRx positions. Quoting from IgBLAST README
+We will do this based on *web* IgBLAST results (the alignment with the best V hit).
+
+Some of our V genes wil lbe identical (modulo signal peptide) to those in the IGMT database, some will not be there; in both cases sequences keep the original name they had. We will store both the complete V sequences and those without the signal peptide.
+
+### D genes
+
+Join each D gene with a V gene which is in the IMGT database, and run IgBLAST on the corresponding construct.
+
+### J genes
+
+Join each J gene with a V and D gene which are in the IMGT database, and run IgBLAST on the corresponding construct. As before, we keep the original names.
+
+#### Coding frame
+
+The coding frame can be extracted from the GenBank annotation file (`data/human-trb-locus.gb` in this case): in the `CDS` annotation field we have
+
+```
+CDS             <551487..>551539
+                 /gene="TRBJ1-6"
+                 /gene_synonym="TCRBJ1S6; TRBJ16"
+                 /exception="rearrangement required for product"
+                 /codon_start=2
+                 /db_xref="GeneID:28630"
+                 /db_xref="HGNC:HGNC:12167"
+                 /db_xref="IMGT/GENE-DB:TRBJ1-6"
+```
+
+we need to take the `codon_start` value and convert it to a 0-based frame (substract 1).
+
+#### CDR3 stop
+
+This position should be derived from the IgBLAST alignment. It should be expressed as a 0-based position.
+
+### CDR3 auxiliary info
+
+> This only applies to **J* genes
+
+Quoting from IgBLAST README:
 
 > 2.  Optional files (download from the release/ directory):
 This is the file to indicate germline J gene coding frame start position (position is 0-based), the J gene type,
