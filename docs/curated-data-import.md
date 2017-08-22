@@ -72,7 +72,9 @@ This position should be derived from the IgBLAST alignment. It should be express
 
 ### CDR3 auxiliary info
 
-> This only applies to **J* genes
+> This only applies to **J** genes
+
+We need to update/add the coding frame and the CDR3 stop position for our J genes, starting with the `human_gl.aux` file.
 
 Quoting from IgBLAST README:
 
