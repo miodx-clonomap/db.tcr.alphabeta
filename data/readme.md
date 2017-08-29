@@ -10,6 +10,14 @@
 
 [human-trb-locus.gb](./human-trb-locus.gb) retrieved from `https://www.ncbi.nlm.nih.gov/nuccore/NG_001333.2?report=gbwithparts&log$=seqview&from=91557&to=667340`
 
+- [V sequences](./human.tcr.beta.V.fasta)
+- [D sequences](./human.tcr.beta.D.fasta)
+- [J sequences](./human.tcr.beta.J.fasta)
+
+#### IgBLAST aux data
+
+- [human](./human.tcr.beta.J.aux)
+
 ## Mouse
 
 ### TRA locus
