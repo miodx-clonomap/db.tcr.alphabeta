@@ -14,6 +14,10 @@
 - [D sequences](./human.tcr.beta.D.fasta)
 - [J sequences](./human.tcr.beta.J.fasta)
 
+#### IgBLAST aux data
+
+- [human](./human.tcr.beta.J.aux)
+
 ## Mouse
 
 ### TRA locus
