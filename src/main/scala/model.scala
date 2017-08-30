@@ -36,23 +36,25 @@ case object Segment {
   case object J extends Segment
 }
 
-sealed
-trait GeneType {
-
-  def species: Species
-  def chain: Chain
-  def segment: Segment
-
+final
+case class GeneType(
+  val species : Species,
+  val chain   : Chain,
+  val segment : Segment
+)
+{
+  final
   def ID: String =
     s"${species.taxonomyID}.${chain.name}.${segment.name}"
 }
 
-sealed
-trait Gene {
-
-  val name: String
-  val geneType: GeneType
-
+final
+case class Gene(
+  val name      : String,
+  val geneType  : GeneType
+)
+{
+  final
   def ID: String =
     s"${geneType.ID}.${name}"
 }
