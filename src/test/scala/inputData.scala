@@ -28,5 +28,4 @@ case object inputData {
 
   def auxIDs(species: Species): Iterator[String] =
     auxLines(species) map { _.takeWhile(_ != '\t') }
-
 }
