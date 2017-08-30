@@ -9,6 +9,11 @@ libraryDependencies ++=
     "ohnosequences" %% "statika" % "2.0.0"
   )
 
+generateStatikaMetadataIn(Compile)
+
+// This includes tests sources in the assembled fat-jar:
+fullClasspath in assembly := (fullClasspath in Test).value
+
 
 // // For resolving dependency versions conflicts:
 // dependencyOverrides ++= Set()
