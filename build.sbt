@@ -4,7 +4,10 @@ description   := "db.tcr project"
 
 bucketSuffix  := "era7.com"
 
-// libraryDependencies ++= Seq()
+libraryDependencies ++=
+  Seq(
+    "ohnosequences" %% "statika" % "2.0.0"
+  )
 
 
 // // For resolving dependency versions conflicts:
