@@ -26,7 +26,7 @@ class WellFormedInputs extends org.scalatest.FunSuite {
         inputData.sequences(Species.human, Chain.TRB, segment)
           .collect { case Right(fa) => fa }
           .map(fa => fa.getV(header).id)
-          .toSeq
+          .toList
 
       assert { ids.distinct == ids }
     }
