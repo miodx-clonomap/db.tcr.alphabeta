@@ -37,6 +37,14 @@ case object data {
   : S3Folder =
     base(species, chain, segment)/"blast"/
 
+  def igblastAux(
+    species : Species,
+    chain   : Chain
+  )
+  : S3Object =
+    base(species, chain, Segment.J)/"blast"/
+      s"${objectPrefix(species, chain, Segment.J)}.aux"
+
   def fastaHeader(gene: Gene): String =
     s"${gene.ID}|${projectID}"
 }
