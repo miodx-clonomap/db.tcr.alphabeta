@@ -15,7 +15,7 @@ class WellFormedInputs extends org.scalatest.FunSuite {
       .map(fa => fa.getV(header).id)
       .toList
 
-  test("well-formed human TCR beta FASTA files") {
+  test("TCR beta human: well-formed FASTA files") {
 
     segments foreach { segment =>
       inputData.sequences(Species.human, Chain.TRB, segment) foreach { lr =>
@@ -24,7 +24,7 @@ class WellFormedInputs extends org.scalatest.FunSuite {
     }
   }
 
-  test("TCR beta FASTA files have no duplicate IDs") {
+  test("TCR beta human: FASTA files have no duplicate IDs") {
 
     segments foreach { segment =>
 
@@ -35,7 +35,7 @@ class WellFormedInputs extends org.scalatest.FunSuite {
     }
   }
 
-  test("TCR beta all J IDs are in the aux file, same order") {
+  test("TCR beta human: all J IDs are in the aux file, same order") {
 
     assert { idsFor(Segment.J) == inputData.auxIDs(Species.human).toList }
   }
