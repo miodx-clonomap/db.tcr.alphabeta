@@ -36,4 +36,7 @@ case object data {
   )
   : S3Folder =
     base(species, chain, segment)/"blast"/
+
+  def fastaHeader(gene: Gene): String =
+    s"${gene.ID}|${projectID}"
 }
