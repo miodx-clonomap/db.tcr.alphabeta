@@ -9,6 +9,12 @@ class WellFormedInputs extends org.scalatest.FunSuite {
   val segments: Set[Segment] =
     Set(Segment.V, Segment.D, Segment.J)
 
+  def idsFor(segment: Segment): List[String] =
+    inputData.sequences(Species.human, Chain.TRB, segment)
+      .collect { case Right(fa) => fa }
+      .map(fa => fa.getV(header).id)
+      .toList
+
   test("well-formed human TCR beta FASTA files") {
 
     segments foreach { segment =>
@@ -23,12 +29,14 @@ class WellFormedInputs extends org.scalatest.FunSuite {
     segments foreach { segment =>
 
       val ids =
-        inputData.sequences(Species.human, Chain.TRB, segment)
-          .collect { case Right(fa) => fa }
-          .map(fa => fa.getV(header).id)
-          .toList
+        idsFor(segment)
 
       assert { ids.distinct == ids }
     }
+  }
+
+  test("TCR beta all J IDs are in the aux file, same order") {
+
+    assert { idsFor(Segment.J) == inputData.auxIDs(Species.human).toList }
   }
 }

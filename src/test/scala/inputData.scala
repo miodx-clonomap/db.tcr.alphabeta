@@ -9,6 +9,10 @@ import ohnosequences.cosas.types._
 
 case object inputData {
 
+  private
+  def lines(file: File): Iterator[String] =
+    Files.lines(file.toPath).iterator.asScala
+
   def sequences(
     species : Species,
     chain   : Chain,
@@ -16,7 +20,13 @@ case object inputData {
   )
   : Iterator[Either[ParseDenotationsError, FASTA.Value]] =
     // TODO fix this
-    Files.lines(new File(s"data/${species.toString}.tcr.beta.${segment.name}.fasta").toPath)
-      .iterator.asScala.buffered.parseFasta()
+    lines( new File(s"data/${species.toString}.tcr.beta.${segment.name}.fasta") )
+      .buffered.parseFasta()
+
+  def auxLines(species: Species): Iterator[String] =
+    lines( new File(s"data/${species.toString}.tcr.beta.J.aux") )
+
+  def auxIDs(species: Species): Iterator[String] =
+    auxLines(species) map { _.takeWhile(_ != '\t') }
 
 }
