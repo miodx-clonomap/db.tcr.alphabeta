@@ -6,7 +6,12 @@ bucketSuffix  := "era7.com"
 
 libraryDependencies ++=
   Seq(
-    "ohnosequences" %% "statika" % "2.0.0"
+    "ohnosequences" %% "statika"    % "2.0.0"
+  ) ++ testDependencies
+
+val testDependencies =
+  Seq(
+    "ohnosequences" %% "fastarious" % "0.11.0" % Test
   )
 
 generateStatikaMetadataIn(Compile)
