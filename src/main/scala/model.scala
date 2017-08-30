@@ -42,11 +42,17 @@ trait GeneType {
   def species: Species
   def chain: Chain
   def segment: Segment
+
+  def ID: String =
+    s"${species.taxonomyID}.${chain.name}.${segment.name}"
 }
 
 sealed
 trait Gene {
 
-  val id: String
+  val name: String
   val geneType: GeneType
+
+  def ID: String =
+    s"${geneType.ID}.${name}"
 }

@@ -10,6 +10,9 @@ package object tcr {
   private val metadata =
     generated.metadata.tcr
 
+  def projectID: String =
+    s"${metadata.organization}.${metadata.artifact}.${metadata.version}"
+
   val s3prefix: S3Folder =
     s3"resources.ohnosequences.com" /
     metadata.organization           /
