@@ -7,8 +7,8 @@ trait Species {
 }
 
 case object Species {
-  case object human extends Species { val taxonomyID = ??? }
-  case object mouse extends Species { val taxonomyID = ??? }
+  case object human extends Species { val taxonomyID = "9606"   }
+  case object mouse extends Species { val taxonomyID = "10090"  }
 }
 
 sealed
