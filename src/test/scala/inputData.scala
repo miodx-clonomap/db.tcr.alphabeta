@@ -18,6 +18,12 @@ case object inputData {
     lines( new File(s"data/${geneType.species.toString}.tcr.beta.${geneType.segment.name}.fasta") )
       .buffered.parseFasta()
 
+  def idsFor(geneType: GeneType): List[String] =
+    inputData.sequences(geneType)
+      .collect { case Right(fa) => fa }
+      .map(fa => fa.getV(header).id)
+      .toList
+
   def auxLines(species: Species): Iterator[String] =
     lines( new File(s"data/${species.toString}.tcr.beta.J.aux") )
 
@@ -33,8 +39,6 @@ case object inputData {
       case Chain.TRA => "JA"
       case Chain.TRB => "JB"
     }
-
-
 
   def aux(species: Species): Iterator[Aux] =
     auxLines(species)
