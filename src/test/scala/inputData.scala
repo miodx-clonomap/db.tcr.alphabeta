@@ -28,6 +28,13 @@ case object inputData {
       case _    => None
     }
 
+  def chainToAuxFormat(chain: Chain): String =
+    chain match {
+      case Chain.TRA => "JA"
+      case Chain.TRB => "JB"
+    }
+
+
 
   def aux(species: Species): Iterator[Aux] =
     auxLines(species)
@@ -53,4 +60,9 @@ case object inputData {
     val chain       : Chain ,
     val stopCDR3    : Int
   )
+  {
+
+    def toTSVRow: String =
+      Seq(id, codonStart.toString, chainToAuxFormat(chain), stopCDR3.toString).mkString("\t")
+  }
 }

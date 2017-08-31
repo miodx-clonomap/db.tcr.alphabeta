@@ -118,3 +118,22 @@ extends org.scalatest.FunSuite {
     transferManager.shutdownNow
   }
 }
+
+abstract class AuxFileGeneration(val species: Species, val chain: Chain) extends org.scalatest.FunSuite {
+
+  val geneType =
+    GeneType(species, chain, Segment.J)
+
+  val description: String =
+    s"${species} ${chain}:"
+
+  test(s"${description} generate aux file") {
+
+    io.printToFile(outputData.auxFileFor(species, chain)) {
+      p =>
+        inputData.aux(species)
+          .map({ a => a.copy(id = data.fastaHeader(Gene(a.id, geneType))) })
+          .foreach({ a => p println a.toTSVRow })
+    }
+  }
+}

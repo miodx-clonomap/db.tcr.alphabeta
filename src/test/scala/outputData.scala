@@ -16,5 +16,4 @@ case object outputData {
 
   def auxFileFor(species: Species, chain: Chain): File =
     new File(base, s"${species.toString}.tcr.${chain.name}.${Segment.J.name}.aux")
-
 }
