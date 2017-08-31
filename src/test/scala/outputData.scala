@@ -14,11 +14,7 @@ case object outputData {
   def fastaFileFor(geneType: GeneType): File =
     new File(base, s"${geneType.species.toString}.tcr.beta.${geneType.segment.name}.fasta")
 
-  def auxFileFor(
-    species : Species,
-    chain   : Chain
-  )
-  : File =
+  def auxFileFor(species: Species, chain: Chain): File =
     new File(base, s"${species.toString}.tcr.${chain.name}.${Segment.J.name}.aux")
 
 }
