@@ -5,6 +5,7 @@ import ohnosequences.fastarious._, fasta._
 import scala.collection.JavaConverters._
 import java.nio.file.Files
 import java.io.File
+import ohnosequences.cosas.types._
 
 case object outputData {
 
@@ -16,4 +17,13 @@ case object outputData {
 
   def auxFileFor(species: Species, chain: Chain): File =
     new File(base, s"${species.toString}.tcr.${chain.name}.${Segment.J.name}.aux")
+
+  def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA.Value]] =
+    io sequences fastaFileFor(geneType)
+
+  def sequencesIDs(geneType: GeneType): Iterator[String] =
+    io sequencesIDs fastaFileFor(geneType)
+
+  def auxIDs(species: Species, chain: Chain): Iterator[String] =
+    io auxIDs auxFileFor(species, chain)
 }

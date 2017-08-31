@@ -136,7 +136,7 @@ abstract class AuxFileGeneration(val species: Species, val chain: Chain) extends
 
   // FIXME this should check the generated file
   test(s"${description} check aux file") {
-    assert { inputData.idsFor(geneType) == inputData.auxIDs(species).toList }
+    assert { outputData.sequencesIDs(geneType).toList == outputData.auxIDs(species, chain).toList }
   }
 
   test(s"${description} upload aux file to S3", ReleaseOnlyTest) {
