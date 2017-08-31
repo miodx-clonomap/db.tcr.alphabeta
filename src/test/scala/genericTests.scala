@@ -8,6 +8,9 @@ import ohnosequences.test._
 import ohnosequences.awstools.s3._
 import util.{ Success, Failure }
 
+/**
+  concrete subclasses will check that the input data for the corresponding combination of @param species, @param chain, and @param segments is well-formed. 
+*/
 abstract class WellFormedInputs(
   val species : Species       ,
   val chain   : Chain         ,
