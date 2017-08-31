@@ -9,8 +9,11 @@ class WellFormedInputs extends org.scalatest.FunSuite {
   val segments: Set[Segment] =
     Set(Segment.V, Segment.D, Segment.J)
 
+  def geneType(segment: Segment): GeneType =
+    GeneType(Species.human, Chain.TRB, segment)
+
   def idsFor(segment: Segment): List[String] =
-    inputData.sequences(Species.human, Chain.TRB, segment)
+    inputData.sequences(geneType(segment))
       .collect { case Right(fa) => fa }
       .map(fa => fa.getV(header).id)
       .toList
@@ -18,7 +21,7 @@ class WellFormedInputs extends org.scalatest.FunSuite {
   test("TCR beta human: well-formed FASTA files") {
 
     segments foreach { segment =>
-      inputData.sequences(Species.human, Chain.TRB, segment) foreach { lr =>
+      inputData.sequences(geneType(segment)) foreach { lr =>
         assert( lr.isRight )
       }
     }

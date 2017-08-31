@@ -20,14 +20,15 @@ class GenerateIDs extends org.scalatest.FunSuite {
       val geneType =
         GeneType(Species.human, Chain.TRB, segment)
 
-      val deleteIfThere =
-        Files.deleteIfExists(outputData.fastaFileFor(Species.human, Chain.TRB, segment).toPath)
-
       val writeTo =
-        outputData.fastaFileFor(Species.human, Chain.TRB, segment)
+        outputData fastaFileFor geneType
+
+      val deleteIfThere =
+        Files deleteIfExists writeTo.toPath
+
 
       val writeFiles =
-        inputData.sequences(Species.human, Chain.TRB, segment)
+        inputData.sequences(geneType)
           .collect({ case Right(a) => a })
           .map(
             { fa =>
@@ -56,9 +57,12 @@ class GenerateIDs extends org.scalatest.FunSuite {
 
     segments foreach { segment =>
 
+      val geneType =
+        GeneType(Species.human, Chain.TRB, segment)
+
       transferManager.upload(
-        outputData.fastaFileFor(Species.human, Chain.TRB, segment),
-        data.fasta(Species.human, Chain.TRB, segment)
+        outputData fastaFileFor geneType,
+        data fasta geneType
       )
       match {
         case Success(_) => succeed

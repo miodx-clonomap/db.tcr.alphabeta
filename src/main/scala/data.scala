@@ -4,46 +4,26 @@ import ohnosequences.awstools.s3._
 
 case object data {
 
-  def base(
-    species : Species,
-    chain   : Chain,
-    segment : Segment
-  )
-  : S3Object =
-    s3prefix/species.taxonomyID/chain.name/segment.name
+  /** The base folder under which all data for this @param geneType will be. */
+  def base(geneType: GeneType): S3Folder =
+    s3prefix                    /
+    geneType.species.taxonomyID /
+    geneType.chain.name         /
+    geneType.segment.name       /
 
-  def objectPrefix(
-    species : Species,
-    chain   : Chain,
-    segment : Segment
-  )
-  : String =
-    s"${species.taxonomyID}.${chain.name}.${segment.name}"
+  def fasta(geneType: GeneType): S3Object =
+    base(geneType) / s"${geneType.ID}.fasta"
 
-  def fasta(
-    species : Species,
-    chain   : Chain,
-    segment : Segment
-  )
-  : S3Object =
-    base(species, chain, segment) /
-      s"${objectPrefix(species, chain, segment)}.fasta"
+  def blastDB(geneType: GeneType): S3Folder =
+    base(geneType) / "blast" /
 
-  def blastDB(
-    species : Species,
-    chain   : Chain,
-    segment : Segment
-  )
-  : S3Folder =
-    base(species, chain, segment)/"blast"/
+  def igblastAux(species: Species, chain: Chain): S3Object = {
 
-  def igblastAux(
-    species : Species,
-    chain   : Chain
-  )
-  : S3Object =
-    base(species, chain, Segment.J)/"blast"/
-      s"${objectPrefix(species, chain, Segment.J)}.aux"
+    val geneType =
+      GeneType(species, chain, Segment.J)
+
+    blastDB(geneType) / s"${geneType.ID}.aux"
+  }
 
   def fastaHeader(gene: Gene): String =
     s"${gene.ID}|${projectID}"
