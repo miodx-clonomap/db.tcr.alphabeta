@@ -7,6 +7,7 @@ import java.nio.file.Files
 import ohnosequences.test._
 import ohnosequences.awstools.s3._
 import util.{ Success, Failure }
+import ohnosequences.blast._, api._, outputFields._
 
 /**
   concrete subclasses will check that the input data for the corresponding combination of @param species, @param chain, and @param segments is well-formed.
@@ -177,4 +178,29 @@ abstract class AuxFileGeneration(val species: Species, val chain: Chain) extends
 
     transferManager.shutdownNow
   }
+}
+
+abstract class GenerateBLASTDBs(
+  val species : Species       ,
+  val chain   : Chain         ,
+  val segments: Set[Segment]
+)
+extends org.scalatest.FunSuite {
+
+  val geneTypes =
+    segments map { segment => GeneType(species, chain, segment) }
+
+  val makeDBCmds: Set[Seq[String]] =
+    geneTypes map {
+      geneType =>
+        makeblastdb(
+          argumentValues =
+            in(outputData fastaFileFor geneType)  ::
+            input_type(DBInputType.fasta)         ::
+            dbtype(BlastDBType.nucl)              ::
+            *[AnyDenotation],
+          optionValues =
+            (makeblastdb.defaults update title( (outputData fastaFileFor geneType).getName )).value
+        ).toSeq
+    }
 }
