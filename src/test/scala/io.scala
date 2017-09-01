@@ -10,6 +10,7 @@ import ohnosequences.fastarious._, fasta._
 case object io {
 
   def printToFile(f: File)(op: PrintWriter => Unit) {
+
     val p =
       new java.io.PrintWriter(f)
 
