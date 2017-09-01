@@ -27,6 +27,9 @@ case object outputData {
   def blastDBFolderFor(geneType: GeneType): File =
     new File(geneTypeBase(geneType), "blast/")
 
+  def blastDBFileFor(geneType: GeneType): File =
+    new File(blastDBFolderFor(geneType), s"${geneType.ID}")
+
   def sequencesIDs(geneType: GeneType): Iterator[String] =
     io sequencesIDs fastaFileFor(geneType)
 

@@ -204,9 +204,10 @@ extends org.scalatest.FunSuite {
 
           makeblastdb(
             argumentValues =
-              in((outputData fastaFileFor geneType).getAbsoluteFile)  ::
-              input_type(DBInputType.fasta)                           ::
-              dbtype(BlastDBType.nucl)                                ::
+              in((outputData fastaFileFor geneType).getAbsoluteFile)      ::
+              input_type(DBInputType.fasta)                               ::
+              dbtype(BlastDBType.nucl)                                    ::
+              out((outputData blastDBFileFor geneType).getAbsoluteFile) ::
               *[AnyDenotation],
             optionValues =
               (makeblastdb.defaults update title( (outputData fastaFileFor geneType).getName )).value
@@ -218,7 +219,6 @@ extends org.scalatest.FunSuite {
 
   val makeDBProcs =
     makeDBGeneTypeCmds map { cmd => Process(command = cmd._2, cwd = outputData blastDBFolderFor cmd._1) }
-
 
   makeDBProcs foreach { proc => println(proc.!!) }
 }
