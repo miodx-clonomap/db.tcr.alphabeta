@@ -92,7 +92,25 @@ extends org.scalatest.FunSuite {
     }
   }
 
-  test("TCR beta human: upload files to S3", ReleaseOnlyTest) {
+  test(s"${description} well-formed FASTA") {
+
+    geneTypes foreach { geneType =>
+      (outputData sequences geneType) foreach { lr => assert( lr.isRight ) }
+    }
+  }
+
+  test(s"${description} FASTA files have no duplicate IDs") {
+
+    geneTypes foreach { geneType =>
+
+      val ids =
+        (outputData sequencesIDs geneType).toList
+
+      assert { ids.distinct == ids }
+    }
+  }
+
+  test(s"${description} upload files to S3", ReleaseOnlyTest) {
 
     val s3 =
       S3Client()
@@ -134,9 +152,9 @@ abstract class AuxFileGeneration(val species: Species, val chain: Chain) extends
     }
   }
 
-  // FIXME this should check the generated file
   test(s"${description} check aux file") {
-    assert { inputData.idsFor(geneType) == inputData.auxIDs(species).toList }
+
+    assert { outputData.sequencesIDs(geneType).toList == outputData.auxIDs(species, chain).toList }
   }
 
   test(s"${description} upload aux file to S3", ReleaseOnlyTest) {
