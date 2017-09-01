@@ -190,17 +190,35 @@ extends org.scalatest.FunSuite {
   val geneTypes =
     segments map { segment => GeneType(species, chain, segment) }
 
-  val makeDBCmds: Set[Seq[String]] =
+  // create output folders
+  geneTypes foreach { geneType =>
+    val outF =
+      java.nio.file.Files.createDirectories( (outputData geneTypeBase geneType).toPath )
+    java.nio.file.Files.createDirectories( (outputData blastDBFolderFor geneType).toPath )
+  }
+
+  val makeDBGeneTypeCmds: Set[(GeneType, Seq[String])] =
     geneTypes map {
       geneType =>
-        makeblastdb(
-          argumentValues =
-            in(outputData fastaFileFor geneType)  ::
-            input_type(DBInputType.fasta)         ::
-            dbtype(BlastDBType.nucl)              ::
-            *[AnyDenotation],
-          optionValues =
-            (makeblastdb.defaults update title( (outputData fastaFileFor geneType).getName )).value
-        ).toSeq
+        geneType -> {
+
+          makeblastdb(
+            argumentValues =
+              in((outputData fastaFileFor geneType).getAbsoluteFile)  ::
+              input_type(DBInputType.fasta)                           ::
+              dbtype(BlastDBType.nucl)                                ::
+              *[AnyDenotation],
+            optionValues =
+              (makeblastdb.defaults update title( (outputData fastaFileFor geneType).getName )).value
+          ).toSeq
+        }
     }
+
+  import scala.sys.process._
+
+  val makeDBProcs =
+    makeDBGeneTypeCmds map { cmd => Process(command = cmd._2, cwd = outputData blastDBFolderFor cmd._1) }
+
+
+  makeDBProcs foreach { proc => println(proc.!!) }
 }
