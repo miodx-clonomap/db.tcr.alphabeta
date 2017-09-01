@@ -12,6 +12,9 @@ case object outputData {
   val base: File =
     new File("sandbox/")
 
+  def geneTypeBase(geneType: GeneType): File =
+    new File(base, s"${geneType.ID}")
+
   def fastaFileFor(geneType: GeneType): File =
     new File(base, s"${geneType.species.toString}.tcr.beta.${geneType.segment.name}.fasta")
 
@@ -20,6 +23,12 @@ case object outputData {
 
   def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA.Value]] =
     io sequences fastaFileFor(geneType)
+
+  def blastDBFolderFor(geneType: GeneType): File =
+    new File(geneTypeBase(geneType), "blast/")
+
+  def blastDBFileFor(geneType: GeneType): File =
+    new File(blastDBFolderFor(geneType), s"${geneType.ID}")
 
   def sequencesIDs(geneType: GeneType): Iterator[String] =
     io sequencesIDs fastaFileFor(geneType)

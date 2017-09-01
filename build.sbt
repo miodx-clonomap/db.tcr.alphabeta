@@ -11,8 +11,9 @@ libraryDependencies ++=
 
 val testDependencies =
   Seq(
-    "ohnosequences" %% "fastarious" % "0.11.0" % Test
-  )
+    "ohnosequences" %% "fastarious" % "0.11.0",
+    "ohnosequences" %% "blast-api"  % "0.9.0"
+  ) map { _ % Test }
 
 generateStatikaMetadataIn(Compile)
 
