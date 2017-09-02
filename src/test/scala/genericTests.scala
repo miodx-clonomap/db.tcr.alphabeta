@@ -9,6 +9,15 @@ import ohnosequences.awstools.s3._
 import util.{ Success, Failure }
 import ohnosequences.blast._, api._, outputFields._
 
+/**
+  Contains all the code that should be run for generating the data corresponding to the given @param species, @param chain, and @param segments. In short:
+
+  - Check input files (no duplicate sequences/IDs, FASTA files OK, ...)
+  - Generate FASTA files with version-scoped IDs, check everything again
+  - Generate IgBLAST `.aux` files, check them
+  - Generate BLAST databases for each gene type
+  - (Release-Only) upload everything to S3
+*/
 abstract class TestsFor(
   val species : Species       ,
   val chain   : Chain         ,
@@ -44,7 +53,7 @@ extends org.scalatest.FunSuite {
 
   test(s"${description} -input- all J IDs are in the aux file, same order") {
 
-    assert { inputData.idsFor(GeneType(species, chain, Segment.J)) == inputData.auxIDs(species).toList }
+    assert { inputData.idsFor(GeneType(species, chain, Segment.J)) == inputData.auxIDs(species, chain).toList }
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -107,7 +116,7 @@ extends org.scalatest.FunSuite {
 
     io.printToFile(outputData.auxFileFor(species, chain)) {
       p =>
-        inputData.aux(species)
+        inputData.aux(species, chain)
           .map({ a => a.copy(id = data.fastaHeader(Gene(a.id, geneType))) })
           .foreach({ a => p println a.toTSVRow })
     }
@@ -117,7 +126,7 @@ extends org.scalatest.FunSuite {
 
     val geneType =
       GeneType(species, chain, Segment.J)
-      
+
     assert { outputData.sequencesIDs(geneType).toList == outputData.auxIDs(species, chain).toList }
   }
 
