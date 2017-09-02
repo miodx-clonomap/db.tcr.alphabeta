@@ -9,6 +9,15 @@ import ohnosequences.awstools.s3._
 import util.{ Success, Failure }
 import ohnosequences.blast._, api._, outputFields._
 
+/**
+  Contains all the code that should be run for generating the data corresponding to the given @param species, @param chain, and @param segments. In short:
+
+  - Check input files (no duplicate sequences/IDs, FASTA files OK, ...)
+  - Generate FASTA files with version-scoped IDs, check everything again
+  - Generate IgBLAST `.aux` files, check them
+  - Generate BLAST databases for each gene type
+  - (Release-Only) upload everything to S3
+*/
 abstract class TestsFor(
   val species : Species       ,
   val chain   : Chain         ,
@@ -19,19 +28,31 @@ extends org.scalatest.FunSuite {
   val geneTypes =
     segments map { GeneType(species, chain, _) }
 
-  val description: String =
-    s"${species} ${chain}:"
+  val testInputMsg: String =
+    "checking inputs |"
+
+  val generateFASTAMsg: String =
+    "generating FASTA files |"
+
+  val generateAuxFileMsg: String =
+    "generating .aux file |"
+
+  val generateBLASTDBsMsg: String =
+    "generating BLAST DBs |"
+
+  val uploadToS3Msg: String =
+    "uploading to S3 |"
 
   //////////////////////////////////////////////////////////////////////////////
   // Input Tests
-  test(s"${description} -input- well-formed FASTA files") {
+  test(s"${testInputMsg} well-formed FASTA files") {
 
     geneTypes foreach { geneType =>
       (inputData sequences geneType) foreach { lr => assert( lr.isRight ) }
     }
   }
 
-  test(s"${description} -input- FASTA files have no duplicate IDs") {
+  test(s"${testInputMsg} FASTA files have no duplicate IDs") {
 
     geneTypes foreach { geneType =>
 
@@ -42,14 +63,14 @@ extends org.scalatest.FunSuite {
     }
   }
 
-  test(s"${description} -input- all J IDs are in the aux file, same order") {
+  test(s"${testInputMsg} all J IDs are in the aux file, same order") {
 
-    assert { inputData.idsFor(GeneType(species, chain, Segment.J)) == inputData.auxIDs(species).toList }
+    assert { inputData.idsFor(GeneType(species, chain, Segment.J)) == inputData.auxIDs(species, chain).toList }
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // FASTA output Tests
-  test(s"${description} -FASTA output- generate FASTA files with scoped IDs") {
+  test(s"${generateFASTAMsg} generate FASTA files with scoped IDs") {
 
     geneTypes foreach { geneType =>
 
@@ -80,14 +101,14 @@ extends org.scalatest.FunSuite {
     }
   }
 
-  test(s"${description} -FASTA output- well-formed FASTA") {
+  test(s"${generateFASTAMsg} well-formed generated FASTA") {
 
     geneTypes foreach { geneType =>
       (outputData sequences geneType) foreach { lr => assert( lr.isRight ) }
     }
   }
 
-  test(s"${description} -FASTA output- FASTA files have no duplicate IDs") {
+  test(s"${generateFASTAMsg} generated FASTA have no duplicate IDs") {
 
     geneTypes foreach { geneType =>
 
@@ -100,28 +121,29 @@ extends org.scalatest.FunSuite {
 
   //////////////////////////////////////////////////////////////////////////////
   // Aux file generation
-  test(s"${description} generate aux file") {
+  test(s"${generateAuxFileMsg} generate aux J file") {
 
     val geneType =
       GeneType(species, chain, Segment.J)
 
     io.printToFile(outputData.auxFileFor(species, chain)) {
       p =>
-        inputData.aux(species)
+        inputData.aux(species, chain)
           .map({ a => a.copy(id = data.fastaHeader(Gene(a.id, geneType))) })
           .foreach({ a => p println a.toTSVRow })
     }
   }
 
-  test(s"${description} check aux J file") {
+  test(s"${generateAuxFileMsg} check aux J file") {
 
     val geneType =
       GeneType(species, chain, Segment.J)
-      
+
     assert { outputData.sequencesIDs(geneType).toList == outputData.auxIDs(species, chain).toList }
   }
 
-
+  //////////////////////////////////////////////////////////////////////////////
+  // BLAST db generation
 
   val makeDBGeneTypeCmds: Set[(GeneType, Seq[String])] =
     geneTypes map {
@@ -141,9 +163,7 @@ extends org.scalatest.FunSuite {
         }
     }
 
-  //////////////////////////////////////////////////////////////////////////////
-  // BLAST db generation
-  test(s"${description} generate BLAST databases") {
+  test(s"${generateBLASTDBsMsg} generate BLAST databases") {
 
     // create output folders
     geneTypes foreach { geneType =>
@@ -157,12 +177,15 @@ extends org.scalatest.FunSuite {
     val makeDBProcs =
       makeDBGeneTypeCmds map { cmd => Process(command = cmd._2, cwd = outputData blastDBFolderFor cmd._1) }
 
-      makeDBProcs foreach { proc => println(proc.!!) }
+    val exitCodes =
+      makeDBProcs.toList map { _ ! ProcessLogger(_ => ()) }
+
+    assert { exitCodes == List.fill(exitCodes.size)(0) }
   }
 
   //////////////////////////////////////////////////////////////////////////////
   // File upload
-  test(s"${description} upload FASTA files to S3", ReleaseOnlyTest) {
+  test(s"${uploadToS3Msg} FASTA files", ReleaseOnlyTest) {
 
     val s3 =
       S3Client()
@@ -185,7 +208,7 @@ extends org.scalatest.FunSuite {
     transferManager.shutdownNow
   }
 
-  test(s"${description} upload aux file to S3", ReleaseOnlyTest) {
+  test(s"${uploadToS3Msg} aux file", ReleaseOnlyTest) {
 
     val s3 =
       S3Client()
@@ -206,7 +229,7 @@ extends org.scalatest.FunSuite {
     transferManager.shutdownNow
   }
 
-  test(s"${description} upload BLAST databases to S3", ReleaseOnlyTest) {
+  test(s"${uploadToS3Msg} BLAST databases", ReleaseOnlyTest) {
 
     val s3 =
       S3Client()
@@ -229,169 +252,3 @@ extends org.scalatest.FunSuite {
     transferManager.shutdownNow
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
-  concrete subclasses will check that the input data for the corresponding combination of @param species, @param chain, and @param segments is well-formed.
-*/
-// abstract class _1_WellFormedInputs(
-//   val species : Species       ,
-//   val chain   : Chain         ,
-//   val segments: Set[Segment]
-// )
-// extends org.scalatest.FunSuite {
-//
-//   val geneTypes =
-//     segments map { GeneType(species, chain, _) }
-//
-//   val description: String =
-//     s"${species} ${chain}:"
-//
-//   test(s"${description} well-formed FASTA files") {
-//
-//     geneTypes foreach { geneType =>
-//       (inputData sequences geneType) foreach { lr => assert( lr.isRight ) }
-//     }
-//   }
-//
-//   test(s"${description} FASTA files have no duplicate IDs") {
-//
-//     geneTypes foreach { geneType =>
-//
-//       val ids =
-//         inputData idsFor geneType
-//
-//       assert { ids.distinct == ids }
-//     }
-//   }
-//
-//   test(s"${description} all J IDs are in the aux file, same order") {
-//
-//     assert { inputData.idsFor(GeneType(species, chain, Segment.J)) == inputData.auxIDs(species).toList }
-//   }
-//   }
-//
-//
-// }
-//
-// abstract class _2_GenerateFASTA(
-//   val species : Species       ,
-//   val chain   : Chain         ,
-//   val segments: Set[Segment]
-// )
-// extends org.scalatest.FunSuite {
-//
-//   val geneTypes =
-//     segments map { GeneType(species, chain, _) }
-//
-//   val description: String =
-//     s"${species} ${chain}:"
-//
-//   test(s"${description} generate FASTA files with scoped IDs") {
-//
-//     geneTypes foreach { geneType =>
-//
-//       val writeTo =
-//         outputData fastaFileFor geneType
-//
-//       val deleteIfThere =
-//         Files deleteIfExists writeTo.toPath
-//
-//
-//       val writeFiles =
-//         inputData.sequences(geneType)
-//           .collect({ case Right(a) => a })
-//           .map(
-//             { fa =>
-//
-//               val gene =
-//                 Gene(fa.getV(header).id, geneType)
-//
-//               FASTA(
-//                 header( FastaHeader(data.fastaHeader(gene)) ) ::
-//                 sequence( fa.getV(sequence) )                 ::
-//                 *[AnyDenotation]
-//               )
-//             }
-//           )
-//           .appendTo(writeTo)
-//     }
-//   }
-//
-//   test(s"${description} well-formed FASTA") {
-//
-//     geneTypes foreach { geneType =>
-//       (outputData sequences geneType) foreach { lr => assert( lr.isRight ) }
-//     }
-//   }
-//
-//   test(s"${description} FASTA files have no duplicate IDs") {
-//
-//     geneTypes foreach { geneType =>
-//
-//       val ids =
-//         (outputData sequencesIDs geneType).toList
-//
-//       assert { ids.distinct == ids }
-//     }
-//   }
-//
-//
-// }
-//
-// abstract class _3_AuxFileGeneration(val species: Species, val chain: Chain) extends org.scalatest.FunSuite {
-//
-//   val geneType =
-//     GeneType(species, chain, Segment.J)
-//
-//   val description: String =
-//     s"${species} ${chain}:"
-//
-//
-//
-// }
-//
-// abstract class _4_GenerateBLASTDBs(
-//   val species : Species       ,
-//   val chain   : Chain         ,
-//   val segments: Set[Segment]
-// )
-// extends org.scalatest.FunSuite {
-//
-//   val geneTypes =
-//     segments map { segment => GeneType(species, chain, segment) }
-//
-//
-// }

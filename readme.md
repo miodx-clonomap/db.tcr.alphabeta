@@ -6,9 +6,12 @@
 [![](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-%28agpl-3.0%29)
 [![](https://img.shields.io/badge/contact-gitter_chat-dd1054.svg)](https://gitter.im/ohnosequences/db.tcr)
 
-TCR V(D)J "genes" sequence for human and mouse.
+A database including germline TCR (α and β) VDJ genes for Human and Mouse.
+
 
 ## NCBI Gene entries
+
+Sequences for each loci are derived from the corresponding GenBank entries.
 
 #### Human
 

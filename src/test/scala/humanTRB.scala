@@ -4,4 +4,5 @@ import ohnosequences.db.tcr._
 import ohnosequences.cosas._
 import ohnosequences.fastarious.fasta._
 
-class HumanTRBInputs extends TestsFor(Species.human, Chain.TRB, Set(Segment.V, Segment.D, Segment.J))
+/** Human TCR β data generation */
+class HumanTRB extends TestsFor(Species.human, Chain.TRB, Set(Segment.V, Segment.D, Segment.J))

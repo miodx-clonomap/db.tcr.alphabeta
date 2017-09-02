@@ -7,21 +7,43 @@ import java.nio.file.Files
 import java.io.File
 import ohnosequences.cosas.types._
 
+/**
+  Input data for database generation.
+
+  Most methods here have input a GeneType; for each onesuch there should be a FASTA file, containing all the gene sequences for it. The other part of the input are IgBLAST `aux` files; there should be one per `(species, chain)` pair.
+*/
 case object inputData {
 
+  /** This class represents a row from an IgBLAST `aux` file. */
+  case class Aux(
+    val id          : String,
+    val codonStart  : Int   ,
+    val chain       : Chain ,
+    val stopCDR3    : Int
+  )
+  {
+
+    def toTSVRow: String =
+      Seq(id, codonStart.toString, chainToAuxFormat(chain), stopCDR3.toString).mkString("\t")
+  }
+
+  /** The sequences for this gene type. */
   // TODO fix this
   def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA.Value]] =
     io.sequences( new File(s"data/${geneType.species.toString}.tcr.beta.${geneType.segment.name}.fasta") )
-    
+
+  /** The IDs for geneType coming from its FASTA file */
   def idsFor(geneType: GeneType): List[String] =
     inputData.sequences(geneType)
       .collect { case Right(fa) => fa }
       .map(fa => fa.getV(header).id)
       .toList
 
-  def auxLines(species: Species): Iterator[String] =
-    io.lines( new File(s"data/${species.toString}.tcr.beta.J.aux") )
+  /** lines for the */
+  def auxLines(species: Species, chain: Chain): Iterator[String] =
+    io.lines( new File(s"data/${species.toString}.tcr.${chain.name}.J.aux") )
 
+  /** Parse a `Chain` object from IgBLAST chain representation */
   def parseChain(rep: String): Option[Chain] =
     rep match {
       case "JA" => Some(Chain.TRA)
@@ -35,8 +57,8 @@ case object inputData {
       case Chain.TRB => "JB"
     }
 
-  def aux(species: Species): Iterator[Aux] =
-    auxLines(species)
+  def aux(species: Species, chain: Chain): Iterator[Aux] =
+    auxLines(species, chain)
       .map(_.split('\t'))
       .filter(_.length == 4)
       .map(
@@ -44,24 +66,13 @@ case object inputData {
             Aux(
               id          = fields(0),
               codonStart  = fields(1).toInt,
+              // TODO fix this; better throw something than this
               chain       = parseChain(fields(2)) getOrElse Chain.TRB,
               stopCDR3    = fields(3).toInt
             )
           }
       )
 
-  def auxIDs(species: Species): Iterator[String] =
-    auxLines(species) map { _.takeWhile(_ != '\t') }
-
-  case class Aux(
-    val id          : String,
-    val codonStart  : Int   ,
-    val chain       : Chain ,
-    val stopCDR3    : Int
-  )
-  {
-
-    def toTSVRow: String =
-      Seq(id, codonStart.toString, chainToAuxFormat(chain), stopCDR3.toString).mkString("\t")
-  }
+  def auxIDs(species: Species, chain: Chain): Iterator[String] =
+    auxLines(species, chain) map { _.takeWhile(_ != '\t') }
 }
