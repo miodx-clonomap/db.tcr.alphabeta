@@ -17,6 +17,9 @@ case object inputData {
   val base: File =
     new File("data/")
 
+  def geneTypeBase(geneType: GeneType): File =
+    new File(base, s"${geneType.ID}")
+
   /** This class represents a row from an IgBLAST `aux` file. */
   case class Aux(
     val id          : String,
@@ -32,7 +35,7 @@ case object inputData {
 
   /** The sequences for this gene type. */
   def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA.Value]] =
-    io sequences new File(base, names ofGeneTypeFASTA geneType)
+    io sequences new File(geneTypeBase(geneType), names ofGeneTypeFASTA geneType)
 
   /** The IDs for geneType coming from its FASTA file */
   def idsFor(geneType: GeneType): List[String] =
@@ -43,7 +46,7 @@ case object inputData {
 
   /** lines for the */
   def auxLines(species: Species, chain: Chain): Iterator[String] =
-    io lines new File(base, names.ofAux(species, chain))
+    io lines new File(geneTypeBase(GeneType(species, chain, Segment.J)), names.ofAux(species, chain))
 
   /** Parse a `Chain` object from IgBLAST chain representation */
   def parseChain(rep: String): Option[Chain] =
