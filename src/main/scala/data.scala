@@ -10,13 +10,11 @@ case object data {
   /** The base folder under which all data for this gene type will be. */
   def base(geneType: GeneType): S3Folder =
     s3prefix                    /
-    geneType.species.taxonomyID /
-    geneType.chain.name         /
-    geneType.segment.name       /
+    (names ofGeneType geneType) /
 
   /** FASTA for this gene type. */
   def fasta(geneType: GeneType): S3Object =
-    base(geneType) / s"${geneType.ID}.fasta"
+    base(geneType) / (names ofGeneTypeFASTA geneType)
 
   /** BLAST database for this gene type */
   def blastDB(geneType: GeneType): S3Folder =

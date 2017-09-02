@@ -11,7 +11,7 @@ case object outputData {
 
   val base: File =
     new File("sandbox/")
-
+    
   def geneTypeBase(geneType: GeneType): File =
     new File(base, s"${geneType.ID}")
 
