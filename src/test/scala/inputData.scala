@@ -14,6 +14,9 @@ import ohnosequences.cosas.types._
 */
 case object inputData {
 
+  val base: File =
+    new File("data/")
+
   /** This class represents a row from an IgBLAST `aux` file. */
   case class Aux(
     val id          : String,
@@ -28,9 +31,8 @@ case object inputData {
   }
 
   /** The sequences for this gene type. */
-  // TODO fix this
   def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA.Value]] =
-    io.sequences( new File(s"data/${geneType.species.toString}.tcr.beta.${geneType.segment.name}.fasta") )
+    io sequences new File(base, names ofGeneTypeFASTA geneType)
 
   /** The IDs for geneType coming from its FASTA file */
   def idsFor(geneType: GeneType): List[String] =
@@ -41,7 +43,7 @@ case object inputData {
 
   /** lines for the */
   def auxLines(species: Species, chain: Chain): Iterator[String] =
-    io.lines( new File(s"data/${species.toString}.tcr.${chain.name}.J.aux") )
+    io lines new File(base, names.ofAux(species, chain))
 
   /** Parse a `Chain` object from IgBLAST chain representation */
   def parseChain(rep: String): Option[Chain] =
