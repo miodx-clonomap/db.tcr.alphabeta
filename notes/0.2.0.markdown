@@ -1,0 +1,4 @@
+The most significant change is the addition of Human TCR alpha sequences. Other changes:
+
+- use consistent names for input and output files
+- improve data generation code: better tests, easier to add new data
