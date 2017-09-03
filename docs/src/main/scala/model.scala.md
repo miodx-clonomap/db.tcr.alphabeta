@@ -66,6 +66,7 @@ case class Gene(
 
 
 
+[test/scala/humanTRA.scala]: ../../test/scala/humanTRA.scala.md
 [test/scala/outputData.scala]: ../../test/scala/outputData.scala.md
 [test/scala/genericTests.scala]: ../../test/scala/genericTests.scala.md
 [test/scala/inputData.scala]: ../../test/scala/inputData.scala.md
@@ -73,4 +74,5 @@ case class Gene(
 [test/scala/humanTRB.scala]: ../../test/scala/humanTRB.scala.md
 [main/scala/package.scala]: package.scala.md
 [main/scala/model.scala]: model.scala.md
+[main/scala/names.scala]: names.scala.md
 [main/scala/data.scala]: data.scala.md
