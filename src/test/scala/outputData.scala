@@ -11,15 +11,17 @@ case object outputData {
 
   val base: File =
     new File("sandbox/")
-    
+
   def geneTypeBase(geneType: GeneType): File =
     new File(base, s"${geneType.ID}")
 
   def fastaFileFor(geneType: GeneType): File =
-    new File(base, s"${geneType.species.toString}.tcr.beta.${geneType.segment.name}.fasta")
+    new File(base, names ofGeneTypeFASTA geneType)
+    //  s"${geneType.species.toString}.tcr.beta.${geneType.segment.name}.fasta")
 
   def auxFileFor(species: Species, chain: Chain): File =
-    new File(base, s"${species.toString}.tcr.${chain.name}.${Segment.J.name}.aux")
+    new File(base, names.ofAux(species, chain))
+      //  s"${species.toString}.tcr.${chain.name}.${Segment.J.name}.aux")
 
   def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA.Value]] =
     io sequences fastaFileFor(geneType)
