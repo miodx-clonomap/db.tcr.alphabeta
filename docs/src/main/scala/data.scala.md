@@ -4,20 +4,27 @@ package ohnosequences.db.tcr
 
 import ohnosequences.awstools.s3._
 
+/**
+  All the S3 addresses for this release data are here.
+*/
 case object data {
 
-  /** The base folder under which all data for this @param geneType will be. */
+  /** The base folder under which all data for this gene type will be. */
   def base(geneType: GeneType): S3Folder =
     s3prefix                    /
-    geneType.species.taxonomyID /
-    geneType.chain.name         /
-    geneType.segment.name       /
+    (names ofGeneType geneType) /
 
+  /** FASTA for this gene type. */
   def fasta(geneType: GeneType): S3Object =
-    base(geneType) / s"${geneType.ID}.fasta"
+    base(geneType) / (names ofGeneTypeFASTA geneType)
 
+  /** BLAST database for this gene type */
   def blastDB(geneType: GeneType): S3Folder =
     base(geneType) / "blast" /
+
+  /** BLAST database title/name for this gene type */
+  def blastDBName(geneType: GeneType): String =
+    s"${geneType.ID}"
 
   def igblastAux(species: Species, chain: Chain): S3Object = {
 
@@ -36,6 +43,7 @@ case object data {
 
 
 
+[test/scala/humanTRA.scala]: ../../test/scala/humanTRA.scala.md
 [test/scala/outputData.scala]: ../../test/scala/outputData.scala.md
 [test/scala/genericTests.scala]: ../../test/scala/genericTests.scala.md
 [test/scala/inputData.scala]: ../../test/scala/inputData.scala.md
@@ -43,4 +51,5 @@ case object data {
 [test/scala/humanTRB.scala]: ../../test/scala/humanTRB.scala.md
 [main/scala/package.scala]: package.scala.md
 [main/scala/model.scala]: model.scala.md
+[main/scala/names.scala]: names.scala.md
 [main/scala/data.scala]: data.scala.md

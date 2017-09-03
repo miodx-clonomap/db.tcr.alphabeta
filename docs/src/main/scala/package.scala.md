@@ -4,15 +4,23 @@ package ohnosequences.db
 
 import ohnosequences.awstools.s3._
 
-package object tcr {
+/**
+  = db.tcr =
 
-  val name: String =
-    "ohnosequences.db.tcr"
+  The main artifact contains S3 addresses for this release data. Everything will be under `s3Prefix`, and you can find the relevant S3 addresses through methods in the [[data]] object.
+
+  Most data depends on a particular [[GeneType]], which is formed by a combination of
+
+  - [[Species]] (such as "Human"),
+  - [[Chain]] (α, β), and
+  - [[Segment]] (J, for example)
+*/
+package object tcr {
 
   private val metadata =
     generated.metadata.tcr
 
-  def projectID: String =
+  val projectID: String =
     s"${metadata.organization}.${metadata.artifact}.${metadata.version}"
 
   val s3prefix: S3Folder =
@@ -27,6 +35,7 @@ package object tcr {
 
 
 
+[test/scala/humanTRA.scala]: ../../test/scala/humanTRA.scala.md
 [test/scala/outputData.scala]: ../../test/scala/outputData.scala.md
 [test/scala/genericTests.scala]: ../../test/scala/genericTests.scala.md
 [test/scala/inputData.scala]: ../../test/scala/inputData.scala.md
@@ -34,4 +43,5 @@ package object tcr {
 [test/scala/humanTRB.scala]: ../../test/scala/humanTRB.scala.md
 [main/scala/package.scala]: package.scala.md
 [main/scala/model.scala]: model.scala.md
+[main/scala/names.scala]: names.scala.md
 [main/scala/data.scala]: data.scala.md
