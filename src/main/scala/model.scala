@@ -1,4 +1,4 @@
-package ohnosequences.db.tcr
+package era7bio.db.tcr
 
 sealed
 trait Species {
