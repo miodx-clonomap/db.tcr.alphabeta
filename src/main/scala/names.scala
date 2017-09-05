@@ -1,4 +1,4 @@
-package ohnosequences.db.tcr
+package era7bio.db.tcr
 
 case object names {
 

@@ -1,10 +1,10 @@
-package ohnosequences.db.tcr.test
+package era7bio.db.tcr.test
 
-import ohnosequences.db.tcr._
+import era7bio.db.tcr._
 import ohnosequences.cosas._, klists._, types._
 import ohnosequences.fastarious.fasta._
 import java.nio.file.Files
-import ohnosequences.test._
+import era7bio.test._
 import ohnosequences.awstools.s3._
 import util.{ Success, Failure }
 import ohnosequences.blast._, api._, outputFields._
