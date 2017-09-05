@@ -1,6 +1,6 @@
 
 ```scala
-package ohnosequences.db
+package era7bio.db
 
 import ohnosequences.awstools.s3._
 
