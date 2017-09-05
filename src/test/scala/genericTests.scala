@@ -129,7 +129,7 @@ extends org.scalatest.FunSuite {
     io.printToFile(outputData.auxFileFor(species, chain)) {
       p =>
         inputData.aux(species, chain)
-          .map({ a => a.copy(id = data.fastaHeader(Gene(a.id, geneType))) })
+          .map({ a => a.copy( id = FastaHeader( data fastaHeader Gene(a.id, geneType) ).id ) })
           .foreach({ a => p println a.toTSVRow })
     }
   }
@@ -158,7 +158,11 @@ extends org.scalatest.FunSuite {
               out((outputData blastDBFileFor geneType).getAbsoluteFile) ::
               *[AnyDenotation],
             optionValues =
-              (makeblastdb.defaults update title( (outputData fastaFileFor geneType).getName )).value
+              (makeblastdb.defaults update
+                title( (outputData fastaFileFor geneType).getName ) ::
+                parse_seqids(true)                                  ::
+                *[AnyDenotation]
+              ).value
           ).toSeq
         }
     }
