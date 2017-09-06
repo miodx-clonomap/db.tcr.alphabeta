@@ -33,5 +33,5 @@ case object data {
   }
 
   def fastaHeader(gene: Gene): String =
-    s"${gene.ID}|${projectID}"
+    s"${gene.name} ${projectID}"
 }
