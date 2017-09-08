@@ -74,33 +74,11 @@ extends org.scalatest.FunSuite {
   // FASTA output Tests
   test(s"${generateFASTAMsg} generate FASTA files with scoped IDs") {
 
-    geneTypes foreach { geneType =>
+    geneTypes foreach dataGeneration.writeOutputFASTA
+  }
+  test(s"${generateFASTAMsg} generate FASTA files with scoped IDs - release", ReleaseOnlyTest) {
 
-      val writeTo =
-        outputData fastaFileFor geneType
-
-      val deleteIfThere =
-        Files deleteIfExists writeTo.toPath
-
-
-      val writeFiles =
-        inputData.sequences(geneType)
-          .collect({ case Right(a) => a })
-          .map(
-            { fa =>
-
-              val gene =
-                Gene(fa.getV(header).id, geneType)
-
-              FASTA(
-                header( FastaHeader(data.fastaHeader(gene)) ) ::
-                sequence( fa.getV(sequence) )                 ::
-                *[AnyDenotation]
-              )
-            }
-          )
-          .appendTo(writeTo)
-    }
+    geneTypes foreach dataGeneration.writeOutputFASTA
   }
 
   test(s"${generateFASTAMsg} well-formed generated FASTA") {
@@ -125,15 +103,12 @@ extends org.scalatest.FunSuite {
   // Aux file generation
   test(s"${generateAuxFileMsg} generate aux J file") {
 
-    val geneType =
-      GeneType(species, chain, Segment.J)
+    dataGeneration.writeAuxFile(species, chain)
+  }
 
-    io.printToFile(outputData.auxFileFor(species, chain)) {
-      p =>
-        inputData.aux(species, chain)
-          .map({ a => a.copy(id = data.fastaHeader(Gene(a.id, geneType))) })
-          .foreach({ a => p println a.toTSVRow })
-    }
+  test(s"${generateAuxFileMsg} generate aux J file - release", ReleaseOnlyTest) {
+
+    dataGeneration.writeAuxFile(species, chain)
   }
 
   test(s"${generateAuxFileMsg} check aux J file") {
@@ -146,44 +121,15 @@ extends org.scalatest.FunSuite {
 
   //////////////////////////////////////////////////////////////////////////////
   // BLAST db generation
-
-  val makeDBGeneTypeCmds: Set[(GeneType, Seq[String])] =
-    geneTypes map {
-      geneType =>
-        geneType -> {
-
-          makeblastdb(
-            argumentValues =
-              in((outputData fastaFileFor geneType).getAbsoluteFile)    ::
-              input_type(DBInputType.fasta)                             ::
-              dbtype(BlastDBType.nucl)                                  ::
-              out((outputData blastDBFileFor geneType).getAbsoluteFile) ::
-              *[AnyDenotation],
-            optionValues =
-              (makeblastdb.defaults update title( (outputData fastaFileFor geneType).getName )).value
-          ).toSeq
-        }
-    }
-
   test(s"${generateBLASTDBsMsg} generate BLAST databases") {
 
-    // create output folders
-    geneTypes foreach { geneType =>
-      val outF =
-        java.nio.file.Files.createDirectories( (outputData geneTypeBase geneType).toPath )
-      java.nio.file.Files.createDirectories( (outputData blastDBFolderFor geneType).toPath )
-    }
-
-    import scala.sys.process._
-
-    val makeDBProcs =
-      makeDBGeneTypeCmds map { cmd => Process(command = cmd._2, cwd = outputData blastDBFolderFor cmd._1) }
-
-    val exitCodes =
-      makeDBProcs.toList map { _ ! ProcessLogger(_ => ()) }
-
-    assert { exitCodes == List.fill(exitCodes.size)(0) }
+    (geneTypes map dataGeneration.writeBLASTDB) foreach { exitCode => assert(exitCode == 0)  }
   }
+  test(s"${generateBLASTDBsMsg} generate BLAST databases - release", ReleaseOnlyTest) {
+
+    (geneTypes map dataGeneration.writeBLASTDB) foreach { exitCode => assert(exitCode == 0)  }
+  }
+
 
   //////////////////////////////////////////////////////////////////////////////
   // File upload
@@ -262,6 +208,7 @@ extends org.scalatest.FunSuite {
 
 [test/scala/humanTRA.scala]: humanTRA.scala.md
 [test/scala/outputData.scala]: outputData.scala.md
+[test/scala/dataGeneration.scala]: dataGeneration.scala.md
 [test/scala/genericTests.scala]: genericTests.scala.md
 [test/scala/inputData.scala]: inputData.scala.md
 [test/scala/io.scala]: io.scala.md
