@@ -14,6 +14,7 @@ class HumanTRA extends TestsFor(Species.human, Chain.TRA, Set(Segment.V, Segment
 
 [test/scala/humanTRA.scala]: humanTRA.scala.md
 [test/scala/outputData.scala]: outputData.scala.md
+[test/scala/dataGeneration.scala]: dataGeneration.scala.md
 [test/scala/genericTests.scala]: genericTests.scala.md
 [test/scala/inputData.scala]: inputData.scala.md
 [test/scala/io.scala]: io.scala.md
