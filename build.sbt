@@ -4,18 +4,19 @@ description   := "A germline TCR database"
 
 bucketSuffix  := "era7.com"
 
-libraryDependencies ++=
-  Seq(
-    "ohnosequences" %% "statika"    % "2.0.0"
-  ) ++ testDependencies
+libraryDependencies ++= Seq(
+  "ohnosequences" %% "aws-scala-tools" % "0.18.1"
+) ++ testDependencies
 
-val testDependencies =
-  Seq(
-    "ohnosequences" %% "fastarious" % "0.11.0",
-    "ohnosequences" %% "blast-api"  % "0.9.0"
-  ) map { _ % Test }
+val testDependencies = Seq(
+  "ohnosequences" %% "fastarious" % "0.11.0",
+  "ohnosequences" %% "blast-api"  % "0.9.0"
+) map { _ % Test }
 
-generateStatikaMetadataIn(Compile)
-
-// This includes tests sources in the assembled fat-jar:
-fullClasspath in assembly := (fullClasspath in Test).value
+// For constructing the S3 address of the generated data
+enablePlugins(BuildInfoPlugin)
+buildInfoKeys := Seq[BuildInfoKey](
+  organization,
+  normalizedName,
+  version
+)

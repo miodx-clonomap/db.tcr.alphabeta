@@ -1,6 +1,7 @@
 package era7bio.db
 
 import ohnosequences.awstools.s3._
+import buildinfo.BuildInfo
 
 /**
   = db.tcr =
@@ -15,15 +16,15 @@ import ohnosequences.awstools.s3._
 */
 package object tcr {
 
-  private val metadata =
-    generated.metadata.tcr
-
-  val projectID: String =
-    s"${metadata.organization}.${metadata.artifact}.${metadata.version}"
+  val projectID: String = Seq(
+    BuildInfo.organization,
+    BuildInfo.normalizedName,
+    BuildInfo.version
+  ).mkString(".")
 
   val s3prefix: S3Folder =
     s3"resources.ohnosequences.com" /
-    metadata.organization           /
-    metadata.artifact               /
-    metadata.version                /
+    BuildInfo.organization /
+    BuildInfo.normalizedName /
+    BuildInfo.version /
 }
