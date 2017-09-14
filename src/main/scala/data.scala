@@ -24,6 +24,7 @@ case object data {
   def blastDBName(geneType: GeneType): String =
     s"${geneType.ID}"
 
+  /** BLAST auxiliary file for this species and chain */
   def igblastAux(species: Species, chain: Chain): S3Object = {
 
     val geneType =
@@ -32,6 +33,7 @@ case object data {
     blastDB(geneType) / s"${geneType.ID}.aux"
   }
 
+  /** FASTA header for this gene */
   def fastaHeader(gene: Gene): String =
     s"${gene.name} ${projectID}"
 }

@@ -15,6 +15,7 @@ val testDependencies = Seq(
 
 // For constructing the S3 address of the generated data
 enablePlugins(BuildInfoPlugin)
+buildInfoPackage := s"${organization.value}.${name.value}"
 buildInfoKeys := Seq[BuildInfoKey](
   organization,
   normalizedName,
