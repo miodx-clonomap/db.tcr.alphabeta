@@ -1,8 +1,8 @@
 
 ```scala
-package era7bio.db.tcr.test
+package ohnosequences.db.tcr.test
 
-import era7bio.db.tcr._
+import ohnosequences.db.tcr._
 import ohnosequences.cosas._
 import ohnosequences.fastarious.fasta._
 

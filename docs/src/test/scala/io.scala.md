@@ -1,8 +1,8 @@
 
 ```scala
-package era7bio.db.tcr.test
+package ohnosequences.db.tcr.test
 
-import era7bio.db.tcr._
+import ohnosequences.db.tcr._
 import scala.collection.JavaConverters._
 import java.nio.file.Files
 import java.io.{ File, PrintWriter }
