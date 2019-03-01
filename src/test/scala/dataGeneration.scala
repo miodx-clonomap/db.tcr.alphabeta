@@ -4,7 +4,7 @@ import ohnosequences.db.tcr._
 import ohnosequences.cosas._, klists._, types._
 import ohnosequences.fastarious.fasta._
 import java.nio.file.Files
-import era7bio.test._
+import ohnosequences.test._
 import ohnosequences.awstools.s3._
 import util.{ Success, Failure }
 import ohnosequences.blast._, api._, outputFields._
