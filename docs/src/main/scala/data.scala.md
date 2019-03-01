@@ -1,6 +1,6 @@
 
 ```scala
-package era7bio.db.tcr
+package ohnosequences.db.tcr
 
 import ohnosequences.awstools.s3._
 
@@ -26,6 +26,7 @@ case object data {
   def blastDBName(geneType: GeneType): String =
     s"${geneType.ID}"
 
+  /** BLAST auxiliary file for this species and chain */
   def igblastAux(species: Species, chain: Chain): S3Object = {
 
     val geneType =
@@ -34,6 +35,7 @@ case object data {
     blastDB(geneType) / s"${geneType.ID}.aux"
   }
 
+  /** FASTA header for this gene */
   def fastaHeader(gene: Gene): String =
     s"${gene.name} ${projectID}"
 }
@@ -43,14 +45,14 @@ case object data {
 
 
 
-[test/scala/humanTRA.scala]: ../../test/scala/humanTRA.scala.md
-[test/scala/outputData.scala]: ../../test/scala/outputData.scala.md
-[test/scala/dataGeneration.scala]: ../../test/scala/dataGeneration.scala.md
-[test/scala/genericTests.scala]: ../../test/scala/genericTests.scala.md
-[test/scala/inputData.scala]: ../../test/scala/inputData.scala.md
-[test/scala/io.scala]: ../../test/scala/io.scala.md
-[test/scala/humanTRB.scala]: ../../test/scala/humanTRB.scala.md
-[main/scala/package.scala]: package.scala.md
-[main/scala/model.scala]: model.scala.md
 [main/scala/names.scala]: names.scala.md
 [main/scala/data.scala]: data.scala.md
+[main/scala/package.scala]: package.scala.md
+[main/scala/model.scala]: model.scala.md
+[test/scala/io.scala]: ../../test/scala/io.scala.md
+[test/scala/inputData.scala]: ../../test/scala/inputData.scala.md
+[test/scala/humanTRB.scala]: ../../test/scala/humanTRB.scala.md
+[test/scala/genericTests.scala]: ../../test/scala/genericTests.scala.md
+[test/scala/outputData.scala]: ../../test/scala/outputData.scala.md
+[test/scala/humanTRA.scala]: ../../test/scala/humanTRA.scala.md
+[test/scala/dataGeneration.scala]: ../../test/scala/dataGeneration.scala.md

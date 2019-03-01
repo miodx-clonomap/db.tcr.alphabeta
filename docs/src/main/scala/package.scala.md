@@ -1,8 +1,9 @@
 
 ```scala
-package era7bio.db
+package ohnosequences.db
 
 import ohnosequences.awstools.s3._
+import ohnosequences.db.tcr.miodx.BuildInfo
 
 /**
   = db.tcr =
@@ -17,17 +18,17 @@ import ohnosequences.awstools.s3._
 */
 package object tcr {
 
-  private val metadata =
-    generated.metadata.tcr
-
-  val projectID: String =
-    s"${metadata.organization}.${metadata.artifact}.${metadata.version}"
+  val projectID: String = Seq(
+    BuildInfo.organization,
+    BuildInfo.normalizedName,
+    BuildInfo.version
+  ).mkString(".")
 
   val s3prefix: S3Folder =
     s3"resources.ohnosequences.com" /
-    metadata.organization           /
-    metadata.artifact               /
-    metadata.version                /
+    BuildInfo.organization /
+    BuildInfo.normalizedName /
+    BuildInfo.version /
 }
 
 ```
@@ -35,14 +36,14 @@ package object tcr {
 
 
 
-[test/scala/humanTRA.scala]: ../../test/scala/humanTRA.scala.md
-[test/scala/outputData.scala]: ../../test/scala/outputData.scala.md
-[test/scala/dataGeneration.scala]: ../../test/scala/dataGeneration.scala.md
-[test/scala/genericTests.scala]: ../../test/scala/genericTests.scala.md
-[test/scala/inputData.scala]: ../../test/scala/inputData.scala.md
-[test/scala/io.scala]: ../../test/scala/io.scala.md
-[test/scala/humanTRB.scala]: ../../test/scala/humanTRB.scala.md
-[main/scala/package.scala]: package.scala.md
-[main/scala/model.scala]: model.scala.md
 [main/scala/names.scala]: names.scala.md
 [main/scala/data.scala]: data.scala.md
+[main/scala/package.scala]: package.scala.md
+[main/scala/model.scala]: model.scala.md
+[test/scala/io.scala]: ../../test/scala/io.scala.md
+[test/scala/inputData.scala]: ../../test/scala/inputData.scala.md
+[test/scala/humanTRB.scala]: ../../test/scala/humanTRB.scala.md
+[test/scala/genericTests.scala]: ../../test/scala/genericTests.scala.md
+[test/scala/outputData.scala]: ../../test/scala/outputData.scala.md
+[test/scala/humanTRA.scala]: ../../test/scala/humanTRA.scala.md
+[test/scala/dataGeneration.scala]: ../../test/scala/dataGeneration.scala.md

@@ -1,5 +1,5 @@
-name          := "db.tcr"
-organization  := "era7bio"
+name          := "db.tcr.miodx"
+organization  := "ohnosequences"
 description   := "A germline TCR database"
 
 bucketSuffix  := "era7.com"
