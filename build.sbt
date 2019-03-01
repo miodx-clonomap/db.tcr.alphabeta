@@ -1,4 +1,4 @@
-name          := "db.tcr.miodx"
+name          := "db.tcr"
 organization  := "ohnosequences"
 description   := "A germline TCR database"
 
