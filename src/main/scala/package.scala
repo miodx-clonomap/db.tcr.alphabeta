@@ -1,7 +1,11 @@
 package ohnosequences.db
 
 import ohnosequences.awstools.s3._
+<<<<<<< HEAD
 import ohnosequences.db.tcr.miodx.BuildInfo
+=======
+import era7bio.db.tcr.BuildInfo
+>>>>>>> master
 
 /**
   = db.tcr =
