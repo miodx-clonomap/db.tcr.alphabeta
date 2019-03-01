@@ -1,4 +1,4 @@
-package era7bio.db.tcr
+package ohnosequences.db.tcr
 
 /** Functions to generate names of gene types */
 case object names {

@@ -1,6 +1,6 @@
-package era7bio.db.tcr.test
+package ohnosequences.db.tcr.test
 
-import era7bio.db.tcr._
+import ohnosequences.db.tcr._
 import ohnosequences.cosas._, klists._, types._
 import ohnosequences.fastarious.fasta._
 import java.nio.file.Files

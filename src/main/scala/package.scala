@@ -1,7 +1,7 @@
-package era7bio.db
+package ohnosequences.db
 
 import ohnosequences.awstools.s3._
-import era7bio.db.tcr.BuildInfo
+import ohnosequences.db.tcr.BuildInfo
 
 /**
   = db.tcr =

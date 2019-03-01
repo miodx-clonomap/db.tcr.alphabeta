@@ -1,4 +1,4 @@
-package era7bio.db.tcr
+package ohnosequences.db.tcr
 
 /** Trait of a Species representing a specific taxon */
 sealed
