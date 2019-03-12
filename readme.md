@@ -1,6 +1,6 @@
 # db.tcr
 
-[![](http://github-release-version.herokuapp.com/github/ohnosequences/db.tcr.miodx/release.svg)](https://github.com/ohnosequences/db.tcr.miodx/releases/latest)
+[![](http://github-release-version.herokuapp.com/github/ohnosequences/db.tcr.alphabeta/release.svg)](https://github.com/ohnosequences/db.tcr.alphabeta/releases/latest)
 [![](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-%28agpl-3.0%29)
 
 A database including germline TCR (α and β) VDJ genes for Human and Mouse.

@@ -10,7 +10,10 @@ import ohnosequences.cosas.types._
 /**
   Input data for database generation.
 
-  Most methods here have input a GeneType; for each onesuch there should be a FASTA file, containing all the gene sequences for it. The other part of the input are IgBLAST `aux` files; there should be one per `(species, chain)` pair.
+  Most methods here have input a GeneType; for each onesuch there should be a
+  FASTA file, containing all the gene sequences for it. The other part of the
+  input are IgBLAST `aux` files; there should be one per `(species, chain)`
+  pair.
 */
 case object inputData {
 
