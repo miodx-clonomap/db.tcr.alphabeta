@@ -1,0 +1,2 @@
+- change name to `db.tcr.alphabeta`
+- add {to/from}String methods to Chain and Segment
