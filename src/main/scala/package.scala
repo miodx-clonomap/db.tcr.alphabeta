@@ -1,7 +1,7 @@
 package ohnosequences.db
 
 import ohnosequences.awstools.s3._
-import ohnosequences.db.tcr.miodx.BuildInfo
+import ohnosequences.db.tcr.alphabeta.BuildInfo
 
 /**
   = db.tcr =
