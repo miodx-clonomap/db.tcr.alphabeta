@@ -7,6 +7,8 @@ sealed
 trait Species {
 
   val taxonomyID: String
+
+  override def toString: String = taxonomyID
 }
 
 /** A comprehensive list of all the supported Species */
@@ -16,6 +18,18 @@ case object Species {
 
   /** Mouse species, taxon 10090 */
   case object mouse extends Species { val taxonomyID = "10090"  }
+
+  /**
+   * Parses a string containing a taxonomyID and returns the corresponding
+   * Species. If the string does not match any supported taxonomyID, None is
+   * returned.
+   */
+  def fromString(str: String) : Option[Species] =
+    str match {
+      case human.taxonomyID => Some(human)
+      case mouse.taxonomyID => Some(mouse)
+      case _ => None
+    }
 }
 
 /** Trait of a Chain */
@@ -32,6 +46,18 @@ case object Chain {
   case object TRA extends Chain
   /** TCR β */
   case object TRB extends Chain
+
+  /**
+   * Parses a string containing a chain name and returns the corresponding
+   * Chain. If the string does not match any supported chain names, None is
+   * returned.
+   */
+  def fromString(str: String) : Option[Chain] =
+    str match {
+      case TRA.name => Some(TRA)
+      case TRB.name => Some(TRB)
+      case _ => None
+    }
 }
 
 /** A trait for a segment of a gene */
@@ -52,6 +78,19 @@ case object Segment {
 
   /** (J)oining segment */
   case object J extends Segment
+
+  /**
+   * Parses a string containing a segment name and returns the corresponding
+   * Segment. If the string does not match any supported chain names, None is
+   * returned.
+   */
+  def fromString(str: String) : Option[Segment] =
+    str match {
+      case V.name => Some(V)
+      case D.name => Some(D)
+      case J.name => Some(J)
+      case _ => None
+    }
 }
 
 /** Gene type, specified by a [[Species]], a [[Chain]] and a [[Segment]] */
