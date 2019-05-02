@@ -37,14 +37,14 @@ case object inputData {
   }
 
   /** The sequences for this gene type. */
-  def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA.Value]] =
+  def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA]] =
     io sequences new File(geneTypeBase(geneType), names ofGeneTypeFASTA geneType)
 
   /** The IDs for geneType coming from its FASTA file */
   def idsFor(geneType: GeneType): List[String] =
     inputData.sequences(geneType)
       .collect { case Right(fa) => fa }
-      .map(fa => fa.getV(header).id)
+      .map(fa => fa.header.id)
       .toList
 
   /** lines for the */

@@ -2,9 +2,9 @@ package ohnosequences.db.tcr.test
 
 import ohnosequences.db.tcr._
 import ohnosequences.cosas._, klists._, types._
+import ohnosequences.fastarious.fasta
 import ohnosequences.fastarious.fasta._
 import java.nio.file.Files
-import ohnosequences.test._
 import ohnosequences.awstools.s3._
 import util.{ Success, Failure }
 import ohnosequences.blast._, api._, outputFields._
@@ -26,12 +26,11 @@ case object dataGeneration {
           { fa =>
 
             val gene =
-              Gene(fa.getV(header).id, geneType)
+              Gene(fa.header.id, geneType)
 
             FASTA(
-              header( FastaHeader(data.fastaHeader(gene)) ) ::
-              sequence( fa.getV(sequence) )                 ::
-              *[AnyDenotation]
+              fasta.Header(data.fastaHeader(gene)),
+               fa.sequence
             )
           }
         )
@@ -46,7 +45,7 @@ case object dataGeneration {
     io.printToFile(outputData.auxFileFor(species, chain)) {
       p =>
         inputData.aux(species, chain)
-          .map({ a => a.copy( id = FastaHeader( data fastaHeader Gene(a.id, geneType) ).id ) })
+          .map({ a => a.copy( id = fasta.Header( data fastaHeader Gene(a.id, geneType) ).id ) })
           .foreach({ a => p println a.toTSVRow })
     }
   }

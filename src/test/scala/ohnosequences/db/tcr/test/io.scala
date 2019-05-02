@@ -20,13 +20,13 @@ case object io {
   def lines(file: File): Iterator[String] =
     Files.lines(file.toPath).iterator.asScala
 
-  def sequences(file: File): Iterator[Either[ParseDenotationsError, FASTA.Value]] =
+  def sequences(file: File): Iterator[Either[ParseDenotationsError, FASTA]] =
     lines(file)
-      .buffered.parseFasta()
+      .buffered.parseFasta.map(Right(_))
 
   def sequencesIDs(file: File): Iterator[String] =
     sequences(file)
-      .collect { case Right(fa) => fa.getV(header).id }
+      .collect { case Right(fa) => fa.header.id }
 
   def auxIDs(file: File): Iterator[String] =
     lines(file) map { _.takeWhile(_ != '\t') }

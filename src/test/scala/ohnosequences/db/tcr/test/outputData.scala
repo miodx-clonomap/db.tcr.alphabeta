@@ -23,7 +23,7 @@ case object outputData {
     new File(base, names.ofAux(species, chain))
       //  s"${species.toString}.tcr.${chain.name}.${Segment.J.name}.aux")
 
-  def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA.Value]] =
+  def sequences(geneType: GeneType): Iterator[Either[ParseDenotationsError, FASTA]] =
     io sequences fastaFileFor(geneType)
 
   def blastDBFolderFor(geneType: GeneType): File =
