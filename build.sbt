@@ -1,16 +1,16 @@
 name          := "db.tcr.alphabeta"
-organization  := "ohnosequences"
+organization  := "com.miodx.clonomap"
 description   := "A germline TCR database"
-
+version       := "0.4.0"
 bucketSuffix  := "era7.com"
 
 libraryDependencies ++= Seq(
-  "ohnosequences" %% "aws-scala-tools" % "0.18.1"
+  "com.miodx.common" %% "aws-scala-tools" % "0.21.0"
 ) ++ testDependencies
 
 val testDependencies = Seq(
-  "ohnosequences" %% "fastarious" % "0.11.0",
-  "ohnosequences" %% "blast-api"  % "0.9.0"
+  "com.miodx.clonomap" %% "fastarious" % "0.12.0",
+  "com.miodx.clonomap" %% "blast-api"  % "0.11.1"
 ) map { _ % Test }
 
 // For constructing the S3 address of the generated data
