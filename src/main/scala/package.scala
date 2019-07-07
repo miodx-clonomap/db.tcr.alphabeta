@@ -19,15 +19,16 @@ import com.miodx.clonomap.db.tcr.alphabeta.BuildInfo
 */
 package object tcr {
 
+  val config: TcrConfig = TcrConfig
   val projectID: String = Seq(
     BuildInfo.organization,
     BuildInfo.normalizedName,
     BuildInfo.version
   ).mkString(".")
 
-  val s3prefix: S3Folder =
-    s3"resources.ohnosequences.com" /
-    BuildInfo.organization /
-    BuildInfo.normalizedName /
-    BuildInfo.version /
+  val s3prefix: S3Folder = S3Bucket(config.s3bucket) / "ohnosequences"/"db-tcr-alphabeta"/"0.4.0"/
+//    S3Bucket(config.s3bucket) /
+//    BuildInfo.organization /
+//    BuildInfo.normalizedName /
+//    BuildInfo.version /
 }

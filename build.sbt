@@ -1,10 +1,10 @@
 name          := "db.tcr.alphabeta"
 organization  := "com.miodx.clonomap"
-version       := "0.4.0"
+version       := "0.5.0-SNAPSHOT"
 description   := "A germline TCR database"
 scalaVersion  := "2.11.11"
 
-bucketSuffix  := "era7.com"
+bucketSuffix  := "miodx.com"
 
 libraryDependencies ++= Seq(
   "com.miodx.common" %% "aws-scala-tools" % "0.19.0"
